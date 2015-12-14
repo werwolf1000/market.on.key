@@ -10,4 +10,6 @@
 define('ISHOP', 'true');
 
 require_once('config.php');
-echo "Привет";
+
+//Подключение контроллера
+require_once CONTROLLER;

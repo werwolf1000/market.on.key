@@ -5,6 +5,8 @@
  * Date: 13.12.2015
  * Time: 18:32
  */
+defined(ISHOP) or die('Access denied');
+
 //Адрес сайта
 define('PATH', 'http://marketonkey.local/');
 
@@ -18,7 +20,7 @@ define('CONTROLLER', 'controller/controller.php');
 define('VIEW', 'views/');
 
 //активный шаблон
-define('TEMPLATE', 'ishop');
+define('TEMPLATE', 'ishop/');
 
 //сервер БД
 define('HOST', 'localhost');
@@ -35,14 +37,13 @@ define('DB', 'ishop');
 //Название
 define('TITLE', 'Интернет магазин сотовых телефонов');
 
-try {
-    $db = new PDO('mysql:host=localhost;dbname=ishop', USER, PASS);
-    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $db->exec('SET NAMES utf8');
-} catch (PDOException $e) {
-    echo $e->getMessage();
-    exit;
-}
+
+mysql_connect('localhost', 'root', '') or die('соединение не удалось');
+
+mysql_select_db('ishop');
+
+mysql_query('SET NAMES utf8');
+
 
 
 
