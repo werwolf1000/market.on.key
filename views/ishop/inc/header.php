@@ -17,6 +17,11 @@ defined(ISHOP) or die('Access denied');
     <!--[if lt IE 9]>
     <script src="http://ie7-js.googlecode.com/svn/version/2.1(beta4)/IE9.js"></script>
     <![endif]-->
+    <script type="text/javascript" src="<?= VIEW . TEMPLATE ?>js/functions.js"></script>
+    <script type="text/javascript" src="<?= VIEW . TEMPLATE ?>js/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="<?= VIEW . TEMPLATE ?>js/jquery-ui-1.8.22.custom.min.js"></script>
+    <script type="text/javascript" src="<?= VIEW . TEMPLATE ?>js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="<?= VIEW . TEMPLATE ?>js/workscripts.js"></script>
 </head>
 <body>
 <div class="main">
