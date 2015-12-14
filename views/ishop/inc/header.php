@@ -5,7 +5,7 @@
  * Date: 13.12.2015
  * Time: 21:33
  */
-
+defined(ISHOP) or die('Access denied');
 ?>
 <!DOCTYPE html>
 <html lang="en">

@@ -5,37 +5,53 @@
  * Date: 13.12.2015
  * Time: 21:33
  */
-
+defined(ISHOP) or die('Access denied');
 ?>
 
 <div id="left-bar">
     <div class="left-bar-cont">
         <h2><span>Каталог</span></h2>
 
-        <h3 class="nav-new"><a href="">Новинки</a></h3>
+        <h3 class="nav-new"><a href="?view=new">Новинки</a></h3>
 
-        <h3 class="nav-lider"><a href="">Лидеры продаж</a></h3>
+        <h3 class="nav-lider"><a href="?view=hits">Лидеры продаж</a></h3>
 
-        <h3 class="nave-sale"><a href="">Распродажа</a></h3>
+        <h3 class="nave-sale"><a href="?view=sale">Распродажа</a></h3>
 
         <h4><span>- Мобильные телефоны</span></h4>
-        <ul class="nav-catalog">
-            <li><a href="">Alcatel</a></li>
-            <li><a href="">Ericsson</a></li>
-            <li><a href="">Lg</a>
-                <ul>
-                    <li>- <a href="">Слайдеры</a></li>
-                    <li>- <a href="">Сенсоры</a></li>
-                    <li>- <a href="">Раскладушки</a></li>
-                    <li>- <a href="">Моноблок </a></li>
-                </ul>
-            </li>
-            <li><a href="">Mitsubish</a></li>
-            <li><a href="">Motorola</a></li>
-            <li><a href="">NEC </a></li>
-            <li><a href="">Nokia</a></li>
-            <li><a href="">Panasonic</a></li>
-            <li><a href="">Ericsson</a></li>
+        <ul class="nav-catalog" id="accordion">
+            <?php foreach ($cat as $key => $item): ?>
+                <?php if (count($item) > 1): // если это родительская категория ?>
+                    <h3>
+                        <li><a href="#"><?= $item[0] ?></a></li>
+                    </h3>
+                    <ul>
+                        <li>- <a href="?view=cat&category=<?= $key ?>">Все модели</a></li>
+                        <?php foreach ($item['sub'] as $key => $sub): ?>
+                            <li>- <a href="?view=cat&category=<?= $key ?>"><?= $sub ?></a></li>
+                        <?php endforeach; ?>
+                    </ul>
+                <?php elseif ($item[0]): // если самостоятельная категория ?>
+                    <li><a href="?view=cat&category=<?= $key ?>"><?= $item[0] ?></a></li>
+                <?php endif; ?>
+            <?php endforeach; ?>
+            <!-- <li><a href="">Alcatel</a></li>
+             <li><a href="">Ericsson</a></li>
+             <li><a href="">Lg</a>
+                 <ul>
+                     <li>- <a href="">Слайдеры</a></li>
+                     <li>- <a href="">Сенсоры</a></li>
+                     <li>- <a href="">Раскладушки</a></li>
+                     <li>- <a href="">Моноблок </a></li>
+                 </ul>
+             </li>
+             <li><a href="">Mitsubish</a></li>
+             <li><a href="">Motorola</a></li>
+             <li><a href="">NEC </a></li>
+             <li><a href="">Nokia</a></li>
+             <li><a href="">Panasonic</a></li>
+             <li><a href="">Ericsson</a></li>-->
+
         </ul>
         <div class="bar-contact">
             <h3>Контакты:</h3>
