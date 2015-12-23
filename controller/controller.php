@@ -16,6 +16,8 @@ require_once '/function/function.php';
 //Получение массива каталога
 $cat = catalog();
 
+//Получение массива информеров
+$informers = informer();
 
 $view = empty($_GET['view']) ? 'hits' : $_GET['view'];
 
