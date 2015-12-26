@@ -49,7 +49,7 @@ INNER JOIN `informers` ON links.parent_informer = informers.informer_id
 }
 
 /* Айстопперы новиеки, лидеры, распроджа*/
-function eyestoper($eyestopper)
+function eyestopper($eyestopper)
 {
 
     $sql = "SELECT `goods_id`,`name`, `img`, `price` FROM goods WHERE `visible`= '1' AND $eyestopper = '1'";
@@ -61,6 +61,39 @@ function eyestoper($eyestopper)
         $eyestopper[] = $row;
     }
     return $eyestopper;
+
+}
+
+/*  Массив товаров по категории */
+function products($category)
+{
+    $query = "SELECT `goods_id`, `name`, `img`,`anons`, `price`,`hits`, `new`, `sale` FROM `goods` WHERE `goods_brandid` = $category AND `visible` = '1'
+                UNION
+              SELECT `goods_id`, `name`, `img`,`anons`, `price`,`hits`, `new`, `sale`  FROM `goods` WHERE `goods_brandid` IN(SELECT `brand_id` FROM `brands` WHERE `parent_id` = $category) AND `visible` = '1'";
+
+    $products = array();
+    $result = mysql_query($query) or die(mysql_error());
+    while ($row = mysql_fetch_assoc($result)) {
+        $products[] = $row;
+    }
+    return $products;
+
+}
+
+//Сумма заказов в корзине + аттрибуты товара
+function total_sum($goods)
+{
+    $total_sum = 0;
+    $goods = implode(',', array_keys($_SESSION['cart']));
+    $sql = "SELECT `goods_id`,`name`,`price` FROM `goods` WHERE `goods_id` IN($goods);";
+    $res = mysql_query($sql) or die(mysql_error());
+    while ($row = mysql_fetch_assoc($res)) {
+        $_SESSION['cart'][$row['goods_id']]['name'] = $row['name'];
+        $_SESSION['cart'][$row['goods_id']]['price'] = $row['price'];
+        $total_sum += $_SESSION['cart'][$row['goods_id']]['qty'] * $row['price'];
+
+    }
+    return $total_sum;
 
 }
 

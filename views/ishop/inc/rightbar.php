@@ -9,22 +9,54 @@ defined(ISHOP) or die('Access denied');
 ?>
 <div id="right-bar">
     <div class="right-bar-cont">
+
+        <!--  авторизация -->
         <div class="enter">
             <h2><span>Авторизация</span></h2>
 
-            <div>
-                <a href=""><img src="<?= VIEW . TEMPLATE ?>image/auth_button.png" alt="Кнопка авторизации"></a>
+            <div class="authform">
+                <?php if (!$_SESSION['auth']['user']): ?>
+                    <form action="#" method="post">
+                        <label for="login" style="float: left; margin-left: 30px">Логин</label><br>
+                        <input placeholder="ваш логин" type="text" name="login" id="login"><br>
+                        <label for="pass" style="float: left; margin-left: 30px; margin-top: 10px;">Пароль</label><br>
+                        <input placeholder="ваш пароль" type="text" name="pass" id="pass"><br><br>
+                        <input type="submit" name="auth" value="Войти" id="auth"><br><br>
+
+                        <p class="link"><a href="?view=reg">регистрация</a></p>
+
+                    </form>
+                <?php endif; ?>
+
+
+                <!-- <a href=""><img src="<? /*= VIEW . TEMPLATE */ ?>image/auth_button.png" alt="Кнопка авторизации"></a>-->
             </div>
         </div>
+        <!-- Авторизация -->
+
+
+
         <div class="basket">
             <h2><span>Корзина</span></h2>
 
             <div>
                 <p>
-                    У вас в корзине <br>
-                    <span>1</span> товар на <span>30 459</span> руб
+
+                    <?php if ($_SESSION['total_quantity']): ?>
+                        У вас в корзине <br>
+                        <span><?= $_SESSION['total_quantity'] ?></span> товар(-ов) на
+                        <span><?= $_SESSION['total_sum'] ?></span> руб
+                        <a href=""><img src="<?= VIEW . TEMPLATE ?>image/oformit.jpg" alt=""></a>
+
+                    <?php else: ?>
+                        <strong>Корзина пуста</strong>  <br><br>
+                    <?php endif; ?>
+
+
+
                 </p>
-                <a href=""><img src="<?= VIEW . TEMPLATE ?>image/oformit.jpg" alt=""></a>
+
+
             </div>
         </div>
         <div class="share-search">

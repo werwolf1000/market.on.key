@@ -15,3 +15,23 @@ function print_arr($arr)
     print_r($arr);
     echo '</pre>';
 }
+
+function addtocart($goods_id)
+{
+    if (isset($_SESSION['cart'][$goods_id])) {
+        //ЕСли в массиве уже есть добавленный товар
+        $_SESSION['cart'][$goods_id]['qty'] += 1;
+    } else {
+        //Если товар кладется в корзину впервые
+        $_SESSION['cart'][$goods_id]['qty'] = 1;
+    }
+    return $_SESSION['cart'];
+}
+
+//Редирект после покупки
+function redirect()
+{
+    $redirect = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : PATH;
+    header('Location: ' . $_SERVER['HTTP_REFERER']);
+    exit;
+}

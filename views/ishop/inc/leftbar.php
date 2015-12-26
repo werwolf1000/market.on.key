@@ -35,22 +35,6 @@ defined(ISHOP) or die('Access denied');
                     <li><a href="?view=cat&category=<?= $key ?>"><?= $item[0] ?></a></li>
                 <?php endif; ?>
             <?php endforeach; ?>
-            <!-- <li><a href="">Alcatel</a></li>
-             <li><a href="">Ericsson</a></li>
-             <li><a href="">Lg</a>
-                 <ul>
-                     <li>- <a href="">Слайдеры</a></li>
-                     <li>- <a href="">Сенсоры</a></li>
-                     <li>- <a href="">Раскладушки</a></li>
-                     <li>- <a href="">Моноблок </a></li>
-                 </ul>
-             </li>
-             <li><a href="">Mitsubish</a></li>
-             <li><a href="">Motorola</a></li>
-             <li><a href="">NEC </a></li>
-             <li><a href="">Nokia</a></li>
-             <li><a href="">Panasonic</a></li>
-             <li><a href="">Ericsson</a></li>-->
 
         </ul>
         <div class="bar-contact">
@@ -78,39 +62,17 @@ defined(ISHOP) or die('Access denied');
             </p>
             <a href="" class="news-arh">Архив новостей</a>
         </div>
-        <div class="info">
-            <h3>Способы оплаты</h3>
 
-            <p>- <a href="">Наличный расчёт</a></p>
-
-            <p>- <a href="">Пластиковой картой</a></p>
-
-            <p>- <a href="">Кредит</a></p>
-
-            <p>- <a href="">Рассчитать кредит</a></p>
-
-            <p>- <a href="">Безналичный расчёт</a></p>
-        </div>
-        <div class="info">
-            <h3>Доставка:</h3>
-
-            <p>- <a href="">Почта России</a></p>
-
-            <p>- <a href="">Курьерская служба</a></p>
-        </div>
-        <div class="info">
-            <h3>Информация для вас:</h3>
-
-            <p>- <a href="">Гарантия</a></p>
-
-            <p>- <a href="">Как выбрать телефон</a></p>
-
-            <p>- <a href="">Ремонт и обслуживание</a></p>
-
-            <p>- <a href="">Акции и новинки</a></p>
-
-            <p>- <a href="">Условия доставки</a></p>
-        </div>
+        <!-- Информеры -->
+        <?php foreach ($informers as $informer): ?>
+            <div class="info">
+                <h3><?= $informer[0] ?></h3>
+                <?php foreach ($informer['sub'] as $key => $sub): ?>
+                    <p>- <a href="?view=informer&id=<?= $key ?>"><?= $sub ?></a></p>
+                <?php endforeach; ?>
+            </div> <!-- .info -->
+        <?php endforeach; ?>
+        <!-- Информеры -->
 
     </div>
 </div>

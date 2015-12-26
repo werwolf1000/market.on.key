@@ -119,6 +119,40 @@ html, body {
     vertical-align: middle;
 }
 
+#auth {
+    padding: 7px 10px;
+    border: 1px solid #DBDDDC;
+    border-radius: 5px;
+    min-width: 150px;
+    font-weight: bold;
+
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,dbdddc+100 */
+    background: #ffffff; /* Old browsers */
+    background: -moz-linear-gradient(top, #ffffff 0%, #dbdddc 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, #ffffff 0%, #dbdddc 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, #ffffff 0%, #dbdddc 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#dbdddc', GradientType=0); /* IE6-9 */
+    cursor: pointer;
+}
+
+#login, #pass {
+    padding: 5px;
+}
+
+.link {
+    font-family: Verdana, Geneva, sans-serif;
+    font-size: 14px;
+
+}
+
+.link a {
+    color: #2c88b9;
+    text-decoration: none;
+}
+
+.link a:hover {
+    text-decoration: underline;
+}
 /*  ----------------------------------- */
 
 #contentwrapper {
@@ -721,7 +755,7 @@ a.sort-bot-act {
     top: 5px;
 }
 
-/* ----------------------table-index.html-------------------------------------- */
+/* ----------------------table-index.php-------------------------------------- */
 .product-table {
     float: left;
     width: 33%;
