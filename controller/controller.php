@@ -24,6 +24,17 @@ $informers = informer();
 // –егистраци€
 if ($_POST['reg']) {
     registration();
+    redirect();
+}
+if ($_GET['do'] == 'logout') {
+    logout();
+    redirect();
+}
+
+if ($_POST['auth']) {
+
+    authorization();
+    redirect();
 }
 
 $view = empty($_GET['view']) ? 'hits' : $_GET['view'];
@@ -46,7 +57,26 @@ switch ($view) {
     case('cat'):
         // товары категории
         $category = abs((int)$_GET['category']);
-        $products = products($category); // получаем массив из модели
+
+        //ѕараметры дл€ навигации
+        $perpage = PERPAGE; //кол-во товаров на страницу
+        if (isset($_GET['page'])) {
+            $page = ((abs((int)$_GET['page'])) == 0) ? 1 : (abs((int)$_GET['page']));
+
+        } else {
+            $page = 1;
+        }
+
+        $count_rows = count_rows($category);
+        $page_count = ceil($count_rows / $perpage);
+        if (!$page_count) {
+            $page_count = 1;//минимум одна страница
+        }
+        /*  if($page > $page_count){
+              $page = $page_count;//если запрошенна страница больше максимума
+          }*/
+        $start_pos = ($page - 1) * $perpage;
+        $products = products($category, $start_pos, $perpage); // получаем массив из модели
         break;
     case('addtocart'):
         $goods_id = $_GET['goods_id'];
@@ -70,10 +100,69 @@ switch ($view) {
         redirect();
         break;
     case('reg'):
+        break;
+    case('cart'):
+        // пересчет товаров в корзине
+        if (isset($_GET['id'], $_GET['qty'])) {
 
+            $goods_id = abs((int)$_GET['id']);
+            $qty = abs((int)$_GET['qty']);
+
+            //$qty = $qty - $_SESSION['cart'][$goods_id]['qty'];
+
+            addtocart($goods_id, $qty);
+
+            $_SESSION['total_sum'] = total_sum($_SESSION['cart']); // сумма заказа
+
+            total_quantity(); // кол-во товара в корзине + защита от ввода несуществующего ID товара
+            redirect();
+        }
+        /* ===”даление из корзины=== */
+
+        if (isset($_GET['delete'])) {
+            $id = abs((int)$_GET['delete']);
+            if ($id) {
+                delete_from_cart($id);
+            }
+            redirect();
+        }
+        /* ѕолучение способов доставки*/
+        $dostavka = get_dostavka();
+        if ($_POST['order_x']) {
+            add_order();
+            redirect();
+
+        }
         break;
 
+    case('search'):
+        //ѕоиск
+        $search_total = search_total_rows();
+        if (isset($_GET['page'])) {
+            $page = $_GET['page'];
+        } else {
+            $page = 1;
+        }
+        $result_search = search($page, $search_total);
+        break;
 
+    case('filter'):
+        // выбор по параметрам
+        $startprice = (int)$_GET['startprice'];
+        $endprice = (int)$_GET['endprice'];
+        $brand = array();
+
+        if ($_GET['brand']) {
+            foreach ($_GET['brand'] as $value) {
+                $value = (int)$value;
+                $brand[$value] = $value;
+            }
+        }
+        if ($brand) {
+            $category = implode(',', $brand);
+        }
+        $products = filter($category, $startprice, $endprice);
+        break;
     default:
         // если из адресной строки получено им€ несуществующего вида
         $view = 'hits';

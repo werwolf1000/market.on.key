@@ -16,8 +16,11 @@ include_once 'inc/header.php';
     </div>
 
 <?php
+
 require_once 'inc/leftbar.php';
 require_once 'inc/rightbar.php';
+
+
 ?>
 
     <div class="clr"></div>

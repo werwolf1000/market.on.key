@@ -18,6 +18,11 @@
     </div>
     <!-- .vid-sort -->
 
+    <?php
+    if ($page_count > 1) {
+        pagination($page, $page_count);
+    }
+    ?>
     <?php if ($products): // если получены товары категории ?>
         <?php foreach ($products as $product): ?>
             <?php if (!isset($_COOKIE['display']) or $_COOKIE['display'] == 'grid'): // если вид - сетка ?>
@@ -94,6 +99,13 @@
                 <!-- Линейный вид продуктов -->
             <?php endif; // конец условия переключателя видов  ?>
         <?php endforeach; ?>
+        <div style="clear: both;"></div>
+
+        <?php
+        if ($page_count > 1) {
+            pagination($page, $page_count);
+        }
+        ?>
     <?php else: ?>
         <p>Здесь товаров пока нет!</p>
     <?php endif; ?>

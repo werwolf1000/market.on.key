@@ -10,6 +10,9 @@ defined(ISHOP) or die('Access denied');
 //Адрес сайта
 define('PATH', 'http://marketonkey.local/');
 
+//Колличество товаров на страницу
+define('PERPAGE', '9');
+
 //модель
 define('MODEL', 'model/model.php');
 
@@ -21,6 +24,9 @@ define('VIEW', 'views/');
 
 //активный шаблон
 define('TEMPLATE', 'ishop/');
+
+// папка с картинками контента
+define('PRODUCTIMG', PATH . 'userfiles/');
 
 //сервер БД
 define('HOST', 'localhost');

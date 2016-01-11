@@ -40,6 +40,7 @@ defined(ISHOP) or die('Access denied');
         </div>
         <form action="/" method="get" class="search">
             <ul class="search_head">
+                <input type="hidden" name="view" value="search"/>
                 <li><input type="text" name="search" id="quickquery" placeholder="Что вы хотите купить?"></li>
                 <li><input type="image" src="<?= VIEW . TEMPLATE ?>image/search_button.jpg"></li>
             </ul>

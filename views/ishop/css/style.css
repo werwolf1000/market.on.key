@@ -1057,3 +1057,55 @@ a.sort-bot-act {
     height: 100px;
     border: 1px solid #ccc;
 }
+
+.error {
+    margin-top: 5px;
+    border: 1px solid #765858;
+    background: #ffeded !important;
+    color: #7f5354 !important;
+    padding: 3px;
+}
+
+.success {
+    margin-top: 5px;
+    border: 1px solid #adc092;
+    background: #f0faf1 !important;
+    color: #58715e !important;
+    padding: 3px;
+}
+
+.error ul {
+    list-style: disc outside none;
+    margin: 20px 0 15px 30px;
+}
+
+/* Авторизация + Регистрация */
+
+/* Постраничная навигация */
+.pagination {
+    text-align: center;
+    margin: 10px;
+}
+
+a.nav_active {
+    border: 1px solid #ccc;
+    background-color: #0196e3;
+    color: #fff;
+    padding: 5px 7px;
+    margin: 0 2px;
+}
+
+a.nav_link {
+    padding: 5px 7px;
+    border: 1px solid #ccc;
+    text-decoration: none;
+    margin: 0 5px;
+    color: #777;
+}
+
+a.nav_link:hover {
+    background-color: #0196e3;
+    color: #fff;
+}
+
+/* Постраничная навигация */
