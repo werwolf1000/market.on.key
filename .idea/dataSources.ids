@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="dataSourceStorage">
+  <data-source name="MySQL - ishop@localhost" uuid="7422127a-bfd8-464d-806a-c638dc11eccd">
+    <database-info product="MySQL" version="5.5.45" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.35 ( Revision: 5fb9c5849535c13917c2cf9baaece6ef9693ef27 )">
+      <extra-name-characters>#@</extra-name-characters>
+      <identifier-quote-string>`</identifier-quote-string>
+    </database-info>
+    <case-sensitivity plain-identifiers="mixed" quoted-identifiers="upper"/>
+    <schema name="" catalog="ishop"/>
+    <table name="brands" schema="" catalog="ishop" type="TABLE">
+      <column name="brand_id" sqlType="TINYINT UNSIGNED" precision="3" scale="0" nullable="false" jdbcType="-6" remarks="aWQg0LHRgNGN0L3QtNCw" autoIncrement="true"/>
+      <column name="brand_name" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12" remarks="0JjQvNGPINCx0YDRjdC90LTQsA=="/>
+      <column name="parent_id" sqlType="TINYINT UNSIGNED" precision="3" scale="0" nullable="false" jdbcType="-6" def="MA==" remarks="0YDQvtC00LjRgtC10LvRjCDQutCw0YLQtdCz0L7RgNC40LggKNGB0LDQvCDRgNC+0LTQuNGC0LXQu9GMIDAp"/>
+      <primary-key name="PRIMARY" columns="brand_id"/>
+    </table>
+    <table name="customers" schema="" catalog="ishop" type="TABLE">
+      <column name="customer_id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4" remarks="aWQg0LrQu9C40LXQvdGC0LA=" autoIncrement="true"/>
+      <column name="name" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12" remarks="0LjQvNGPINC60LvQuNC10L3RgtCw"/>
+      <column name="email" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12" remarks="ZW1haWwg0LrQu9C40LXQvdGC0LA="/>
+      <column name="phone" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12" remarks="0YLQtdC70LXRhNC+0L0="/>
+      <column name="address" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12" remarks="0LDQtNGA0LXRgSDQutC70LjQtdC90YLQsA=="/>
+      <column name="login" sqlType="VARCHAR" precision="20" scale="0" nullable="false" jdbcType="12" remarks="0LvQvtCz0LjQvQ=="/>
+      <column name="password" sqlType="VARCHAR" precision="32" scale="0" nullable="false" jdbcType="12" remarks="0L/QsNGA0L7Qu9GM"/>
+      <primary-key name="PRIMARY" columns="customer_id"/>
+    </table>
+    <table name="dostavka" schema="" catalog="ishop" type="TABLE">
+      <column name="dostavka_id" sqlType="TINYINT UNSIGNED" precision="3" scale="0" nullable="false" jdbcType="-6" remarks="aWQg0LTQvtGB0YLQsNCy0LrQuA==" autoIncrement="true"/>
+      <column name="name" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12" remarks="0YLQuNC/INC00L7RgdGC0LDQstC60Lg="/>
+      <primary-key name="PRIMARY" columns="dostavka_id"/>
+    </table>
+    <table name="goods" schema="" catalog="ishop" type="TABLE">
+      <column name="goods_id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4" remarks="aWQg0YLQvtCy0LDRgNCw" autoIncrement="true"/>
+      <column name="name" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12" remarks="0L3QsNC30LLQsNC90LjQtSDRgtC+0LLQsNGA0LA="/>
+      <column name="keywords" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12" remarks="0LrQu9GO0YfQtdCy0YvQtSDRgdC70L7QstCw"/>
+      <column name="description" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12" remarks="0L7Qv9C40YHQsNC90LjQtQ=="/>
+      <column name="img" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12" remarks="0LrQsNGA0YLQuNC90LrQsCDRgtC+0LLQsNGA0LA="/>
+      <column name="goods_brandid" sqlType="TINYINT UNSIGNED" precision="3" scale="0" nullable="false" jdbcType="-6" remarks="aWQg0LHRgNGN0L3QtNCwKNC60LDRgtC10LPQvtGA0LjQuCk="/>
+      <column name="anons" sqlType="TEXT" precision="65535" scale="0" nullable="false" jdbcType="-1" remarks="0JDQvdC+0L3RgQ=="/>
+      <column name="content" sqlType="TEXT" precision="65535" scale="0" nullable="false" jdbcType="-1" remarks="0J/QvtC70L3QvtC1INC+0L/QuNGB0LDQvdC40LU="/>
+      <column name="visible" sqlType="ENUM" precision="2" scale="0" nullable="false" jdbcType="1" def="JzEn" remarks="0J/QvtC60LDQt9GL0LLQsNGC0Ywg0LjQu9C4INCd0LXRgg=="/>
+      <column name="hits" sqlType="ENUM" precision="2" scale="0" nullable="false" jdbcType="1" def="JzAn" remarks="0KXQuNGC0Ysg0L/RgNC+0LTQsNC2"/>
+      <column name="new" sqlType="ENUM" precision="2" scale="0" nullable="false" jdbcType="1" def="JzAn" remarks="0J3QvtCy0LjQvdC60Lg="/>
+      <column name="sale" sqlType="ENUM" precision="2" scale="0" nullable="false" jdbcType="1" def="JzAn" remarks="0KHQutC40LTQutCw"/>
+      <column name="price" sqlType="FLOAT" precision="12" scale="0" nullable="false" jdbcType="7" def="MA==" remarks="0KbQtdC90LA="/>
+      <column name="date" sqlType="DATE" precision="10" scale="0" nullable="false" jdbcType="91" remarks="0LTQsNGC0LA="/>
+      <column name="img_slide" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12" remarks="0KHQu9Cw0LnQtNGL"/>
+      <primary-key name="PRIMARY" columns="goods_id"/>
+    </table>
+    <table name="informers" schema="" catalog="ishop" type="TABLE">
+      <column name="informer_id" sqlType="TINYINT UNSIGNED" precision="3" scale="0" nullable="false" jdbcType="-6" remarks="aWQg0LjQvdGE0L7RgNC80LXRgNCw" autoIncrement="true"/>
+      <column name="informer_name" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12" remarks="0L3QsNC30LLQsNC90LjQtSDQuNC90YTQvtGA0LzQtdGA0LA="/>
+      <column name="informer_position" sqlType="TINYINT UNSIGNED" precision="3" scale="0" nullable="false" jdbcType="-6" def="MA==" remarks="0L/QvtC30LjRhtC40Y8g0LjQvdGE0L7RgNC80LXRgNCw"/>
+      <primary-key name="PRIMARY" columns="informer_id"/>
+    </table>
+    <table name="links" schema="" catalog="ishop" type="TABLE">
+      <column name="link_id" sqlType="TINYINT UNSIGNED" precision="3" scale="0" nullable="false" jdbcType="-6" remarks="aWQg0LjQvdGE0L7RgNC80LXRgNCw" autoIncrement="true"/>
+      <column name="link_name" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12" remarks="0LjQvNGPINC40L3RhNC+0YDQvNC10YDQsA=="/>
+      <column name="parent_informer" sqlType="TINYINT UNSIGNED" precision="3" scale="0" nullable="false" jdbcType="-6" remarks="0LrQsNGC0LXQs9C+0YDQuNGPINC40L3RhNC+0YDQvNC10YDQsA=="/>
+      <column name="links_position" sqlType="TINYINT UNSIGNED" precision="3" scale="0" nullable="false" jdbcType="-6" def="MA==" remarks="0L/QvtC30LjRhtC40Y8g0LjQvdGE0L7RgNC80LXRgNCw"/>
+      <column name="keywords" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12" remarks="0LrQu9GO0YfQtdCy0YvQtSDRgdC70L7QstCw"/>
+      <column name="description" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12" remarks="0L7Qv9C40YHQsNC90LjQtQ=="/>
+      <column name="text" sqlType="TEXT" precision="65535" scale="0" nullable="false" jdbcType="-1" remarks="0YHQvtC00LXRgNC20LjQvNC+0LUg0LjQvdGE0L7RgNC80LXRgNCw"/>
+      <primary-key name="PRIMARY" columns="link_id"/>
+    </table>
+    <table name="news" schema="" catalog="ishop" type="TABLE">
+      <column name="news_id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4" remarks="aWQg0L3QvtCy0L7RgdGC0Lg=" autoIncrement="true"/>
+      <column name="title" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12" remarks="0L3QsNC30LLQsNC90LjQtSDQvdC+0LLQvtGB0YLQuA=="/>
+      <column name="anons" sqlType="TEXT" precision="65535" scale="0" nullable="false" jdbcType="-1" remarks="0LDQvdC+0L3RgQ=="/>
+      <column name="text" sqlType="TEXT" precision="65535" scale="0" nullable="false" jdbcType="-1" remarks="0YHQvtC00LXRgNC20LjQvNC+0LUg0L3QvtCy0L7RgdGC0Lg="/>
+      <column name="date" sqlType="DATE" precision="10" scale="0" nullable="false" jdbcType="91" remarks="0LTQsNGC0LA="/>
+      <primary-key name="PRIMARY" columns="news_id"/>
+    </table>
+    <table name="orders" schema="" catalog="ishop" type="TABLE">
+      <column name="order_id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4" remarks="0J/QvtGA0Y/QtNC60L7QstGL0Lkg0L3QvtC80LXRgCDQt9Cw0LrQsNC30LA=" autoIncrement="true"/>
+      <column name="customer_id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4" remarks="0J/QvtGA0Y/QtNC60L7QstGL0Lkg0L3QvtC80LXRgCDQt9Cw0LrQsNC30YfQuNC60LA="/>
+      <column name="date" sqlType="DATETIME" precision="19" scale="0" nullable="false" jdbcType="93" remarks="0JTQsNGC0LAg0LfQsNC60LDQt9Cw"/>
+      <column name="dostavka_id" sqlType="TINYINT UNSIGNED" precision="3" scale="0" nullable="false" jdbcType="-6" remarks="0KLQuNC/INCy0YvQsdGA0LDQvdC90L7QuSDQtNC+0YHRgtCw0LLQutC4"/>
+      <column name="payment_id" sqlType="TINYINT UNSIGNED" precision="3" scale="0" nullable="false" jdbcType="-6" remarks="0KHQv9C+0YHQvtCxINC+0L/Qu9Cw0YLRiw=="/>
+      <column name="status" sqlType="ENUM" precision="2" scale="0" nullable="false" jdbcType="1" def="JzAn" remarks="0KHRgtCw0YLRg9GBINC30LDQutCw0LfQsA=="/>
+      <primary-key name="PRIMARY" columns="order_id"/>
+    </table>
+    <table name="pages" schema="" catalog="ishop" type="TABLE">
+      <column name="page_id" sqlType="TINYINT UNSIGNED" precision="3" scale="0" nullable="false" jdbcType="-6" remarks="aWQg0YHRgtGA0LDQvdC40YbRiw==" autoIncrement="true"/>
+      <column name="title" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12" remarks="0J3QsNC30LLQsNC90LjQtSDRgdGC0YDQsNC90LjRhtGL"/>
+      <column name="keywords" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12" remarks="0LrQu9GO0YfQtdCy0YvQtSDRgdC70L7QstCw"/>
+      <column name="description" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12" remarks="0L7Qv9C40YHQsNC90LjQtQ=="/>
+      <column name="position" sqlType="TINYINT UNSIGNED" precision="3" scale="0" nullable="false" jdbcType="-6" def="MA==" remarks="0L/QvtC30LjRhtC40Y8g0YHRgtGA0LDQvdC40YfQutC4"/>
+      <column name="text" sqlType="TEXT" precision="65535" scale="0" nullable="false" jdbcType="-1" remarks="0YHQvtC00LXRgNC20LjQvNC+0LUg0YHRgtGA0LDQvdC40YbRiw=="/>
+      <primary-key name="PRIMARY" columns="page_id"/>
+    </table>
+    <table name="payment" schema="" catalog="ishop" type="TABLE">
+      <column name="payment_id" sqlType="TINYINT UNSIGNED" precision="3" scale="0" nullable="false" jdbcType="-6" autoIncrement="true"/>
+      <column name="name" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12" remarks="0YHQv9C+0YHQvtCxINC00L7RgdGC0LDQstC60Lg="/>
+      <primary-key name="PRIMARY" columns="payment_id"/>
+    </table>
+    <table name="zakaz_tovar" schema="" catalog="ishop" type="TABLE">
+      <column name="zakaz_tovar_id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4" remarks="aWQg0YLQvtCy0LDRgNCw" autoIncrement="true"/>
+      <column name="orders_id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4" remarks="aWQg0LfQsNC60LDQt9Cw"/>
+      <column name="goods_id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4" remarks="aWQg0YLQvtCy0LDRgNCw"/>
+      <column name="quantity" sqlType="TINYINT UNSIGNED" precision="3" scale="0" nullable="false" jdbcType="-6" remarks="0LrQvtC70LvQuNGH0LXRgdGC0LLQviDQt9Cw0LrQsNC30LDQvdC90YvRhSDRgtC+0LLQsNGA0L7Qsg=="/>
+      <primary-key name="PRIMARY" columns="zakaz_tovar_id"/>
+    </table>
+  </data-source>
+</component>

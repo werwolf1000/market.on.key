@@ -1,15 +1,10 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: User
- * Date: 12.12.2015
- * Time: 23:16
- */
-//запрет прямого обращения
 
-define('ISHOP', 'true');
+// запрет прямого обращения
+define('ISHOP', TRUE);
 
-require_once('config.php');
+// подключение файла конфигурации
+require_once 'config.php';
 
-//Подключение контроллера
+// подключение контроллера
 require_once CONTROLLER;

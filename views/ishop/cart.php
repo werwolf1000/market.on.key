@@ -1,14 +1,12 @@
 <?php defined('ISHOP') or die('Access denied'); ?>
 <div id="content-zakaz">
-    <h2>Оформление заказа</h2>
+	<h2>Оформление заказа</h2>
 	<?php
-
 	if (isset($_SESSION['order']['res'])) {
 		echo $_SESSION['order']['res'];
-		unset($_SESSION['order']['res']);
 	}
 	?>
-    <?php if($_SESSION['cart']): // проверка корзины, если в корзине есть товары ?>
+	<?php if($_SESSION['cart']): // проверка корзины, если в корзине есть товары ?>
 	<table class="zakaz-maiin-table" border="0" cellspacing="0" cellpadding="0">
 	<form method="post" action="">
 	  <tr>
@@ -18,39 +16,33 @@
 		<td class="z_top" align="center">&nbsp;</td>
 	  </tr>
 <?php foreach($_SESSION['cart'] as $key => $item): ?>
-
 	  <tr>
 		<td class="z_name">
-			<a href="#"><img src="<?=PRODUCTIMG?>img-zakaz.jpg<?=$item['img']?>" width="32" title="" /></a>
-			<a href="#"><?=$item['name']?></a>
+			<a href="?view=product&amp;goods_id=<?=$key?>"><img src="<?=PRODUCTIMG?><?=$item['img']?>" width="32" title="" /></a> 
+			<a href="?view=product&amp;goods_id=<?=$key?>"><?=$item['name']?></a>
 		</td>
 		<td class="z_kol"><input id="id<?=$key?>" class="kolvo" type="text" value="<?=$item['qty']?>" name="" /></td>
 		<td class="z_price"><?=$item['price']?></td>
-		<td class="z_del"><a href="?view=cart&delete=<?=$key?>"><img src="<?= VIEW . TEMPLATE ?>image/delete.jpg" title="удалить товар из заказа" /></a></td>
+		<td class="z_del"><a href="?view=cart&amp;delete=<?=$key?>"><img src="<?=TEMPLATE?>images/delete.jpg" title="удалить товар из заказа" /></a></td>
 	  </tr>
 <?php endforeach; ?>
 	  <tr>
 		<td class="z_bot">&nbsp;&nbsp;&nbsp;&nbsp;Итого:</td>
 		<td class="z_bot" colspan="3" align="right"><?=$_SESSION['total_quantity']?> шт &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <?=$_SESSION['total_sum']?> руб.</td>
 	  </tr>
-
+	  
 	</table>
-
-<div class="sposob-dostavki">
+	
+	<div class="sposob-dostavki">
 		<h4>Способы доставки:</h4>
         <?php foreach($dostavka as $item): ?>
         <p><input type="radio" name="dostavka" value="<?=$item['dostavka_id']?>" /><?=$item['name']?></p>
         <?php endforeach; ?>
-			<!--
-            <p><input type="radio" name="1" value="1" /> Курьером, 200 руб</p>
-			<p><input type="radio" name="1" value="2" /> Самовывоз, бесплатно</p>
-			<p><input type="radio" name="1" value="3" /> В магазин, бесплатно</p>
-            -->
-	</div>
-
-
+	</div>		
+	
+	
 	<h3>Информация для доставки:</h3>
-<?php if(!$_SESSION['auth']['user']): // проверка авторизации ?>
+<?php if(!$_SESSION['auth']['user']): // проверка авторизации ?>	
 	<table class="zakaz-data" border="0" cellspacing="0" cellpadding="0">
 	  <tr class="notauth">
 		<td class="zakaz-txt">*ФИО</td>
@@ -75,7 +67,7 @@
 	  <tr>
 		<td class="zakaz-txt" style="vertical-align:top;">Примечание </td>
 		<td class="zakaz-txtarea"><textarea name="prim"><?=$_SESSION['order']['prim']?></textarea></td>
-		<td class="zakaz-prim" style="vertical-align:top;">Пример: Позвоните пожалуйста после 10 вечера,
+		<td class="zakaz-prim" style="vertical-align:top;">Пример: Позвоните пожалуйста после 10 вечера, 
 до этого времени я на работе </td>
 	  </tr>
 	</table>
@@ -84,24 +76,20 @@
         <tr>
     		<td class="zakaz-txt" style="vertical-align:top;">Примечание </td>
     		<td class="zakaz-txtarea"><textarea name="prim"></textarea></td>
-    		<td class="zakaz-prim" style="vertical-align:top;">Пример: Позвоните пожалуйста после 10 вечера,
+    		<td class="zakaz-prim" style="vertical-align:top;">Пример: Позвоните пожалуйста после 10 вечера, 
     до этого времени я на работе </td>
         </tr>
 	</table>
-<?php endif; // конец условия проверки авторизации ?>
-		<input type="image" name="order" src="<?= VIEW . TEMPLATE ?>image/zakazat.jpg" />
-
-		<br /><br /><br /><br />
-
-<?php
-
-unset($_SESSION['order']);
-?>
-
+<?php endif; // конец условия проверки авторизации ?>		
+		<input type="image" name="order" src="<?=TEMPLATE?>images/zakazat.jpg" /> 
+		
+		<br /><br /><br /><br />	
+	
 	</form>
     <?php else: // если товаров нет ?>
         Корзина пуста
     <?php endif; // конец условия проверки корзины ?>
+	<?php
+	unset($_SESSION['order']);
+	?>
 </div> <!-- .content-zakaz -->
-
-

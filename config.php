@@ -1,55 +1,60 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: User
- * Date: 13.12.2015
- * Time: 18:32
- */
-defined(ISHOP) or die('Access denied');
 
-//Адрес сайта
+defined('ISHOP') or die('Access denied');
+
+// домен
 define('PATH', 'http://marketonkey.local/');
 
-//Колличество товаров на страницу
-define('PERPAGE', '9');
-
-//модель
+// модель
 define('MODEL', 'model/model.php');
 
-//контроллер
+// контроллер
 define('CONTROLLER', 'controller/controller.php');
 
-//вид
+// вид
 define('VIEW', 'views/');
 
-//активный шаблон
-define('TEMPLATE', 'ishop/');
+// папка с активным шаблоном
+define('TEMPLATE', VIEW . 'ishop/');
 
 // папка с картинками контента
-define('PRODUCTIMG', PATH . 'userfiles/');
+define('PRODUCTIMG', PATH . 'userfiles/product_img/baseimg/');
 
-//сервер БД
+// папка с картинками галереи
+define('GALLERYIMG', PATH . 'userfiles/product_img/');
+
+// сервер БД
 define('HOST', 'localhost');
 
-//Пользователь
+// пользователь
 define('USER', 'root');
 
-//Пароль
+// пароль
 define('PASS', '');
 
-//БД
+// БД
 define('DB', 'ishop');
 
-//Название
+// название магазина - title
 define('TITLE', 'Интернет магазин сотовых телефонов');
 
+// email администратора
+define('ADMIN_EMAIL', 'admin@ishop.com');
 
-mysql_connect('localhost', 'root', '') or die('соединение не удалось');
+// количество товаров на страницу
+define('PERPAGE', 9);
 
-mysql_select_db('ishop');
+// папка шаблонов административной части
+define('ADMIN_TEMPLATE', 'templates/');
 
-mysql_query('SET NAMES utf8');
+// кол-во новостей на страницу
+define('PERPAGE_NEW', 4);
 
+define('ROOT_DIR_MY', '/apache/market.on.key/www/');
 
+// максимально допустимый вес загружаемых картинок - 1 Мб
+define('SIZE', 1048576);
 
-
+mysql_connect(HOST, USER, PASS) or die('No connect to Server');
+mysql_select_db(DB) or die('No connect to DB');
+mysql_query("SET NAMES 'UTF8'") or die('Cant set charset');

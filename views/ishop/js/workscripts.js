@@ -1,5 +1,5 @@
 $(document).ready(function () {
-
+    
     /* ===Аккордеон=== */
     var openItem = false;
     if (jQuery.cookie("openItem") && jQuery.cookie("openItem") != 'false') {
@@ -21,29 +21,70 @@ $(document).ready(function () {
     });
     /* ===Аккордеон=== */
 
+    /* ===Переключатель вида=== */
+    if ($.cookie("display") == null) {
+        $.cookie("display", "grid");
+    }
 
-    /* Авторизация */
-    $('#auth').live('click', function (e) {
+    $(".grid_list").click(function () {
+        var display = $(this).attr("id"); // получаем значение переключателя вида
+        display = (display == "grid") ? "grid" : "list"; // допустимые значения
+        if (display == $.cookie("display")) {
+            // если значение совпадает с кукой - ничего не делаем
+            return false;
+        } else {
+            // иначе - установим куку с новым значением вида
+            $.cookie("display", display);
+            window.location = "?" + query;
+            return false;
+        }
+    });
+    /* ===Переключатель вида=== */
+
+    /* ===Сортировка=== */
+    $("#param_order").toggle(
+        function () {
+            $(".sort-wrap").css({'visibility': 'visible'});
+        },
+        function () {
+            $(".sort-wrap").css({'visibility': 'hidden'});
+        }
+    );
+    /* ===Сортировка=== */
+
+    /* ===Авторизация=== */
+    $("#auth").click(function (e) {
         e.preventDefault();
         var login = $("#login").val();
         var pass = $("#pass").val();
         var auth = $("#auth").val();
-
         $.ajax({
             url: './',
             type: 'POST',
             data: {auth: auth, login: login, pass: pass},
             success: function (res) {
-                res = $(res).find('.authform');
-                $(".authform").hide().fadeIn(500).html(res);
-                $('.notauth').fadeIn(500).remove();
+                if (res != 'Поля логин/пароль должны быть заполнены!' && res != 'Логин/пароль введены неверно!') {
+                    // если пользователь успешно авторизован
+                    $(".authform").hide().fadeIn(500).html(res + '<a href="?do=logout">Выход</a>');
+                    // удаляем лишние поля заказа
+                    $(".notauth").fadeOut(500);
+                    setTimeout(function () {
+                        $(".notauth").remove();
+                    }, 500);
+                } else {
+                    // если авторизация неудачна
+                    $(".error").remove();
+                    $(".authform").append('<div class="error"></div>');
+                    $(".error").hide().fadeIn(500).html(res);
+                }
             },
             error: function () {
                 alert("Error!");
             }
         });
-
     });
+    /* ===Авторизация=== */
+    
     /* ===Клавиша ENTER при пересчете=== */
     $(".kolvo").keypress(function (e) {
         if (e.which == 13) {
@@ -60,13 +101,10 @@ $(document).ready(function () {
             var qty = $(this).val(); // кол-во перед пересчетом
             var res = confirm("Пересчитать корзину?");
             if (res) {
-
                 var id = $(this).attr("id");
                 id = id.substr(2);
-                console.log()
                 if (!parseInt(qty)) {
                     qty = qty_start;
-
                 }
                 // передаем параметры
                 window.location = "?view=cart&qty=" + qty + "&id=" + id;
@@ -76,8 +114,51 @@ $(document).ready(function () {
             }
         });
     });
+    /* ===Пересчет товаров в корзине=== */
+
+    /* ===Галерея товаров=== */
+    $("a[rel=gallery]").fancybox({
+        'transitionIn': 'elastic',
+        'transitionOut': 'elastic',
+        'speedIn': 500,
+        'speedOut': 500
+    });
+
+    /*    var ImgArr, ImgLen;
+     //Предварительная загрузка
+     function Preload (url)
+     {
+     if (!ImgArr){
+     ImgArr=new Array();
+     ImgLen=0;
+     }
+     ImgArr[ImgLen]=new Image();
+     ImgArr[ImgLen].src=url;
+     ImgLen++;
+     }
+     $('.item_thumbs a').each(function(){
+     Preload( $(this).attr('href') );
+     })
+
+
+     //обвес клика по превью
+     $('.item_thumbs a').click(function(e){
+     e.preventDefault();
+     if(!$(this).hasClass('active')){
+     var target = $(this).attr('href');
+
+     $('.item_thumbs a').removeClass('active');
+     $(this).addClass('active');
+
+     $('.item_img img').fadeOut('fast', function(){
+     $(this).attr('src', target).load(function(){
+     $(this).fadeIn();
+     })
+     })
+     }
+     });
+     $('.item_thumbs a:first').trigger('click');*/
+    /* ===Галерея товаров=== */
+
 
 });
-
-
-

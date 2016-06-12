@@ -19,7 +19,6 @@ function catalog()
     }
     return $cat;
 }
-
 /* ====Каталог - получение массива=== */
 
 /* ===Информеры - получение массива=== */
@@ -42,8 +41,22 @@ function informer()
     }
     return $informers;
 }
-
 /* ===Информеры - получение массива=== */
+/* ===Получение текста информера=== */
+function get_text_informer($informer_id)
+{
+    $query = "SELECT link_id, link_name, text, informers.informer_id, informers.informer_name
+                FROM links
+                    LEFT JOIN informers ON informers.informer_id = links.parent_informer
+                        WHERE link_id = $informer_id";
+    $res = mysql_query($query);
+
+    $text_informer = array();
+    $text_informer = mysql_fetch_assoc($res);
+    return $text_informer;
+}
+
+/* ===Получение текста информера=== */
 
 /* ===Айстопперы - новинки, лидеры продаж, распродажа=== */
 function eyestopper($eyestopper)
@@ -59,45 +72,44 @@ function eyestopper($eyestopper)
 
     return $eyestoppers;
 }
-
 /* ===Айстопперы - новинки, лидеры продаж, распродажа=== */
 
-/* Получение колличество товаров для навигации*/
+/* ===Получение кол-ва товаров для навигации=== */
 function count_rows($category)
 {
     $query = "(SELECT COUNT(goods_id) as count_rows
                  FROM goods
                      WHERE goods_brandid = $category AND visible='1')
-               UNION
+               UNION      
                (SELECT COUNT(goods_id) as count_rows
-                 FROM goods
-                     WHERE goods_brandid IN
+                 FROM goods 
+                     WHERE goods_brandid IN 
                 (
                     SELECT brand_id FROM brands WHERE parent_id = $category
                 ) AND visible='1')";
     $res = mysql_query($query) or die(mysql_error());
-    $count_rows = null;
+
     while ($row = mysql_fetch_assoc($res)) {
         if ($row['count_rows']) $count_rows = $row['count_rows'];
     }
     return $count_rows;
 }
 
+/* ===Получение кол-ва товаров для навигации=== */
+
 /* ===Получение массива товаров по категории=== */
-function products($category, $start_pos = 1, $per_page)
+function products($category, $order_db, $start_pos, $perpage)
 {
-    $query = "(SELECT goods_id, name, img, anons, price, hits, new, sale
+    $query = "(SELECT goods_id, name, img, anons, price, hits, new, sale, date
                  FROM goods
                      WHERE goods_brandid = $category AND visible='1')
                UNION      
-               (SELECT goods_id, name, img, anons, price, hits, new, sale
+               (SELECT goods_id, name, img, anons, price, hits, new, sale, date
                  FROM goods 
                      WHERE goods_brandid IN 
                 (
                     SELECT brand_id FROM brands WHERE parent_id = $category
-                ) AND visible='1') LIMIT $start_pos, $per_page";
-
-    $res = mysql_query($query) or die(mysql_error());
+                ) AND visible='1') ORDER BY $order_db LIMIT $start_pos, $perpage";
     $res = mysql_query($query) or die(mysql_error());
 
     $products = array();
@@ -107,8 +119,49 @@ function products($category, $start_pos = 1, $per_page)
 
     return $products;
 }
-
 /* ===Получение массива товаров по категории=== */
+
+/* ===Выбор по параметрам=== */
+function filter($category, $startprice, $endprice)
+{
+    $products = array();
+    if ($category OR $endprice) {
+        $predicat1 = "visible='1'";
+        if ($category) {
+            $predicat1 .= " AND goods_brandid IN($category)";
+            $predicat2 = "UNION
+                        (SELECT goods_id, name, img, price, hits, new, sale
+                        FROM goods
+                            WHERE goods_brandid IN
+                            (
+                                SELECT brand_id FROM brands WHERE parent_id IN($category)
+                            ) AND visible='1'";
+            if ($endprice) $predicat2 .= " AND price BETWEEN $startprice AND $endprice";
+            $predicat2 .= ")";
+        }
+        if ($endprice) {
+            $predicat1 .= " AND price BETWEEN $startprice AND $endprice";
+        }
+
+        $query = "(SELECT goods_id, name, img, price, hits, new, sale
+                    FROM goods
+                        WHERE $predicat1)
+                         $predicat2 ORDER BY name";
+        $res = mysql_query($query) or die(mysql_error());
+        if (mysql_num_rows($res) > 0) {
+            while ($row = mysql_fetch_assoc($res)) {
+                $products[] = $row;
+            }
+        } else {
+            $products['notfound'] = "<div class='error'>По указанным параметрам ничего не найдено</div>";
+        }
+    } else {
+        $products['notfound'] = "<div class='error'>Вы не указали параметры подбора</div>";
+    }
+    return $products;
+}
+
+/* ===Выбор по параметрам=== */
 
 /* ===Сумма заказа в корзине + атрибуты товара===*/
 function total_sum($goods)
@@ -117,7 +170,7 @@ function total_sum($goods)
 
     $str_goods = implode(',', array_keys($goods));
 
-    $query = "SELECT goods_id, name, price
+    $query = "SELECT goods_id, name, price, img
                 FROM goods
                     WHERE goods_id IN ($str_goods)";
     $res = mysql_query($query) or die(mysql_error());
@@ -125,11 +178,11 @@ function total_sum($goods)
     while ($row = mysql_fetch_assoc($res)) {
         $_SESSION['cart'][$row['goods_id']]['name'] = $row['name'];
         $_SESSION['cart'][$row['goods_id']]['price'] = $row['price'];
+        $_SESSION['cart'][$row['goods_id']]['img'] = $row['img'];
         $total_sum += $_SESSION['cart'][$row['goods_id']]['qty'] * $row['price'];
     }
     return $total_sum;
 }
-
 /* ===Сумма заказа в корзине + атрибуты товара===*/
 
 /* ===Регистрация=== */
@@ -137,12 +190,12 @@ function registration()
 {
     $error = ''; // флаг проверки пустых полей
 
-    $login = mysql_real_escape_string(trim(strip_tags($_POST['login'])));
-    $pass = trim(strip_tags($_POST['pass']));
-    $name = mysql_real_escape_string(trim(strip_tags($_POST['name'])));
-    $email = mysql_real_escape_string(trim(strip_tags($_POST['email'])));
-    $phone = mysql_real_escape_string(trim(strip_tags($_POST['phone'])));
-    $address = mysql_real_escape_string(trim(strip_tags($_POST['address'])));
+    $login = clear($_POST['login']);
+    $pass = trim($_POST['pass']);
+    $name = clear($_POST['name']);
+    $email = clear($_POST['email']);
+    $phone = clear($_POST['phone']);
+    $address = clear($_POST['address']);
 
     if (empty($login)) $error .= '<li>Не указан логин</li>';
     if (empty($pass)) $error .= '<li>Не указан пароль</li>';
@@ -174,8 +227,15 @@ function registration()
                 // если запись добавлена
                 $_SESSION['reg']['res'] = "<div class='success'>Регистрация прошла успешно.</div>";
                 $_SESSION['auth']['user'] = $name;
-                $_SESSION['auth']['email'] = $email;
                 $_SESSION['auth']['customer_id'] = mysql_insert_id();
+                $_SESSION['auth']['email'] = $email;
+            } else {
+                $_SESSION['reg']['res'] = "<div class='error'>Ошибка</div>";
+                $_SESSION['reg']['login'] = $login;
+                $_SESSION['reg']['name'] = $name;
+                $_SESSION['reg']['email'] = $email;
+                $_SESSION['reg']['phone'] = $phone;
+                $_SESSION['reg']['addres'] = $address;
             }
         }
     } else {
@@ -188,7 +248,6 @@ function registration()
         $_SESSION['reg']['addres'] = $address;
     }
 }
-
 /* ===Регистрация=== */
 
 /* ===Авторизация=== */
@@ -199,30 +258,28 @@ function authorization()
 
     if (empty($login) OR empty($pass)) {
         // если пусты поля логин/пароль
-        $_SESSION['auth']['error'] = "<div class='error'>Поля логин/пароль должны быть заполнены!</div>";
+        $_SESSION['auth']['error'] = "Поля логин/пароль должны быть заполнены!";
     } else {
         // если получены данные из полей логин/пароль
         $pass = md5($pass);
 
-        $query = "SELECT customer_id,name, email FROM customers WHERE login = '$login' AND password = '$pass' LIMIT 1";
+        $query = "SELECT customer_id, name, email FROM customers WHERE login = '$login' AND password = '$pass' LIMIT 1";
         $res = mysql_query($query) or die(mysql_error());
         if (mysql_num_rows($res) == 1) {
             // если авторизация успешна
             $row = mysql_fetch_row($res);
-
             $_SESSION['auth']['customer_id'] = $row[0];
             $_SESSION['auth']['user'] = $row[1];
             $_SESSION['auth']['email'] = $row[2];
         } else {
             // если неверен логин/пароль
-            $_SESSION['auth']['error'] = "<div class='error'>Логин/пароль введены неверно!</div>";
+            $_SESSION['auth']['error'] = "Логин/пароль введены неверно!";
         }
     }
 }
-
 /* ===Авторизация=== */
 
-/* Способы доставки */
+/* ===Способы доставки=== */
 function get_dostavka()
 {
     $query = "SELECT * FROM dostavka";
@@ -236,7 +293,7 @@ function get_dostavka()
     return $dostavka;
 }
 
-/* Способы доставки */
+/* ===Способы доставки=== */
 
 /* ===Добавление заказа=== */
 function add_order()
@@ -274,19 +331,15 @@ function add_order()
             $_SESSION['order']['prim'] = $address;
             return false;
         }
-        $_SESSION['order']['email'] = $email;
     }
-
-
+    $_SESSION['order']['email'] = $email;
     save_order($customer_id, $dostavka_id, $prim);
 }
-
 /* ===Добавление заказа=== */
 
 /* ===Добавление заказчика-гостя=== */
 function add_customer($name, $email, $phone, $address)
 {
-
     $query = "INSERT INTO customers (name, email, phone, address)
                 VALUES ('$name', '$email', '$phone', '$address')";
     $res = mysql_query($query);
@@ -303,9 +356,7 @@ function add_customer($name, $email, $phone, $address)
         $_SESSION['order']['prim'] = $address;
         return false;
     }
-
 }
-
 /* ===Добавление заказчика-гостя=== */
 
 /* ===Сохранение заказа=== */
@@ -321,12 +372,9 @@ function save_order($customer_id, $dostavka_id, $prim)
         return false;
     }
     $order_id = mysql_insert_id(); // ID сохраненного заказа
-    $val = '';
-    if (empty($_SESSION['cart'])) {
-        return false;
-    }
+
     foreach ($_SESSION['cart'] as $goods_id => $value) {
-        $val .= "($order_id, $goods_id, {$value['qty']}),";
+        $val .= "($order_id, $goods_id, {$value['qty']}),";    
     }
     $val = substr($val, 0, -1); // удаляем последнюю запятую
 
@@ -340,58 +388,57 @@ function save_order($customer_id, $dostavka_id, $prim)
                         WHERE customer_id = $customer_id AND login = ''");
         return false;
     }
-    if (isset($_SESSION['auth']['email'])) {
-        $email = $_SESSION['auth']['email'];
-    } else {
-        $email = $_SESSION['order']['email'];
 
-    }
-
+    if ($_SESSION['auth']['email']) $email = $_SESSION['auth']['email'];
+    else $email = $_SESSION['order']['email'];
     mail_order($order_id, $email);
-    // если заказ выгрузился
 
+    // если заказ выгрузился
     unset($_SESSION['cart']);
     unset($_SESSION['total_sum']);
     unset($_SESSION['total_quantity']);
     $_SESSION['order']['res'] = "<div class='success'>Спасибо за Ваш заказ. В ближайшее время с Вами свяжется менеджер для согласования заказа.</div>";
     return true;
 }
-
 /* ===Сохранение заказа=== */
 
-/* Отправка уведомлений  о заказе на email */
+/* ===Отправка уведомлений о заказе на email=== */
 function mail_order($order_id, $email)
 {
-    $to = $email;
-    $subject = "Заказ в интернет магазине";
-    $headers = "Content-type: text/plain; charset=utf-8\r\n";
+    //mail(to, subject, body, header);
+    // тема письма
+    $subject = "Заказ в интернет-магазине";
+    // заголовки
+    $headers .= "Content-type: text/plain; charset=utf-8\r\n";
     $headers .= "From: ISHOP";
-    $body = "Благодарим вас за ваш заказ\r\n";
-    $body .= "Номер вашегозаказа $order_id \r\n";
-    $body .= "Заказанные товары:\r\n";
-    foreach ($_SESSION['cart'] as $key => $val) {
-        $body .= "$key => " . $val['name'] . ",цена: " . $val['price'] . " , колличество:" . $val['qty'] . "\r\n\r\n";
+    // тело письма
+    $mail_body = "Благодарим Вас за заказ!\r\nНомер Вашего заказа - {$order_id}
+    \r\n\r\nЗаказанные товары:\r\n";
+    // атрибуты товара
+    foreach ($_SESSION['cart'] as $goods_id => $value) {
+        $mail_body .= "Наименование: {$value['name']}, Цена: {$value['price']}, Количество: {$value['qty']} шт.\r\n";
     }
-    $body .= "Итого: " . $_SESSION['total_sum'] . "руб";
-    mail($to, $subject, $body, $headers);
+    $mail_body .= "\r\nИтого: {$_SESSION['total_quantity']} на сумму: {$_SESSION['total_sum']}";
+
+    // отправка писем
+    mail($email, $subject, $mail_body, $headers);
+    mail(ADMIN_EMAIL, $subject, $mail_body, $headers);
 }
 
-/* Отправка уведомлений  о заказе на email */
-
+/* ===Отправка уведомлений о заказе на email=== */
 
 /* ===Поиск=== */
-function search($page, $search_total)
+function search()
 {
     $search = clear($_GET['search']);
     $result_search = array(); //результат поиска
-    $perpage = ($page - 1) * PERPAGE;
 
     if (mb_strlen($search, 'UTF-8') < 4) {
         $result_search['notfound'] = "<div class='error'>Поисковый запрос должен содержать не менее 4-х символов</div>";
     } else {
         $query = "SELECT goods_id, name, img, price, hits, new, sale
                     FROM goods
-                        WHERE MATCH(name) AGAINST('{$search}*' IN BOOLEAN MODE) AND visible='1' LIMIT $perpage," . PERPAGE;
+                        WHERE MATCH(name) AGAINST('{$search}*' IN BOOLEAN MODE) AND visible='1'";
         $res = mysql_query($query) or die(mysql_error());
 
         if (mysql_num_rows($res) > 0) {
@@ -406,28 +453,89 @@ function search($page, $search_total)
     return $result_search;
 }
 
-
 /* ===Поиск=== */
 
-
-function search_total_rows()
+/* ===Отдельный товар=== */
+function get_goods($goods_id)
 {
-    $search = $_GET['search'];
-    $sql = "SELECT count(*) as total_rows
-                    FROM goods
-                        WHERE MATCH(name) AGAINST('{$search}*' IN BOOLEAN MODE) AND visible='1'";
-    $result = mysql_query($sql);
-    $count = '';
-    while ($row = mysql_fetch_assoc($result)) {
-        $count = $row['total_rows'];
+    $query = "SELECT * FROM goods WHERE goods_id = $goods_id AND visible = '1'";
+    $res = mysql_query($query);
+
+    $goods = array();
+    $goods = mysql_fetch_assoc($res);
+    if ($goods['img_slide']) {
+        $goods['img_slide'] = explode("|", $goods['img_slide']);
     }
-    return $count;
+
+    return $goods;
 }
 
+/* ===Отдельный товар=== */
 
-/* ===Выбор по параметрам=== */
-function filter($category, $startprice, $endprice)
+/*  Статические страницы сайта */
+function pages()
+{
+    $query = "SELECT page_id, title FROM pages ORDER BY position";
+    $res = mysql_query($query);
+
+    $pages = array();
+    while ($row = mysql_fetch_assoc($res)) {
+        $pages[] = $row;
+    }
+    return $pages;
+}
+
+function get_page($page_id)
+{
+    $sql = "SELECT title, text FROM pages WHERE page_id = $page_id ";
+    $res = mysql_query($sql);
+    return mysql_fetch_assoc($res);
+}
+
+/* Название новотсей */
+function get_title_news()
 {
 
+    $sql = "SELECT news_id, title, date FROM news ORDER BY news_id DESC LIMIT 2";
+
+    $res = mysql_query($sql);
+    $news = array();
+
+    while ($row = mysql_fetch_assoc($res)) {
+        $news[] = $row;
+    }
+    return $news;
 }
-/* ===Выбор по параметрам=== */
+
+/* тдельная новость*/
+function get_news_text($news_id)
+{
+
+    $sql = "SELECT title, text, date FROM news WHERE news_id = $news_id";
+    $res = mysql_query($sql);
+    return mysql_fetch_assoc($res);
+
+}
+
+
+/* Получение названий для хлебных крох*/
+function brand_name($categry)
+{
+    $sql = "SELECT brand_id, brand_name FROM brands WHERE brand_id = (SELECT parent_id FROM brands WHERE brand_id = $categry)
+              UNION
+            SELECT  brand_id, brand_name FROM brands WHERE brand_id = $categry
+";
+
+    $res = mysql_query($sql);
+    $brand_name = array();
+    while ($row = mysql_fetch_assoc($res)) {
+        $brand_name[] = $row;
+    }
+    return $brand_name;
+}
+/* Получение названий для хлебных крох*/
+
+
+
+
+
